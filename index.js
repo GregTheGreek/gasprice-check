@@ -2,11 +2,15 @@ const Web3 = require("web3");
 
 const web3 = new Web3(process.argv[2])
 
+const percentile = 60;
+
 const startBlock = "12284961";
-const endBlock   = "12285000";
+const endBlock   = "12284980";
 //const endBlock   = "12289964";
 
-const data = {};
+const data = {
+  prices: []
+};
 
 const main = async () => {
   for (let i=startBlock;i<endBlock;i++){
@@ -20,16 +24,22 @@ const main = async () => {
       gasPrices.push(tx.gasPrice / web3.utils.unitMap.gwei);
     }
     data[block.number] = {
-      avgPrice: gethEstimateFn(gasPrices),
-      gasPrices
+      gethPrice: gethEstimateFn(gasPrices),
+      avgrPrice: avg(gasPrices)
     };
+    data.prices.push(...gasPrices)
   }
+  console.log(data)
+}
 
-  console.log(data);
+const avg = (prices) => {
+  return prices.reduce((x,y) => x + y) / prices.length;
 }
 
 const gethEstimateFn = (prices) => {
-  return prices.reduce((a,b) => a + b) / prices.length;
+  const sorted = data.prices.sort();
+  const price = sorted[Math.floor((sorted.length - 1)*(percentile/100))];
+  return price;  
 }
 
-main().then(() => {});
+main().then(() => {process.exit()});

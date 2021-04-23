@@ -1,0 +1,11 @@
+{
+  "name": "gasprice-check",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:GregTheGreek/gasprice-check.git",
+  "author": "Gregory Markou <gregorymarkou@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "web3": "3.0.0-rc.0"
+  }
+}
